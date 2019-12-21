@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.IOException;
 import java.sql.Date;
-import java.sql.Time;
 
 @Controller
 @RequestMapping("/hqx_update")
@@ -61,7 +60,7 @@ public class ResourceController {
             article.setRecommend(recommend);
             article.setHtmlUrl(fileUrl);
             article.setPicUrl(picUrl);
-            article.setDate(new Date(System.currentTimeMillis()));
+            article.setDate(new Date(System.currentTimeMillis()).toString());
             // 保存文章信息至数据库 存储进数据库的url应该是静态资源全url
             boolean write = writeSevice.saveArticle(part, article);
             if (!write) {
@@ -106,7 +105,7 @@ public class ResourceController {
     public static void main(String[] args) {
         String url = IDUtil.getIdByTimeAnd3Random() + ".html" + ".jpg";
         System.out.println(url.substring(url.lastIndexOf(".")));
-        System.out.println(new Date(System.currentTimeMillis()));
+        System.out.println(new Date(System.currentTimeMillis()).toString());
     }
 
 }
