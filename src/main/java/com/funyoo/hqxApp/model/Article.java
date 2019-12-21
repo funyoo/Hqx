@@ -20,7 +20,7 @@ public class Article {
 
     private Integer recommend;
 
-    private Date date;
+    private String date;
 
     private Timestamp createdTime;
 
@@ -75,11 +75,11 @@ public class Article {
         this.recommend = recommend;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
