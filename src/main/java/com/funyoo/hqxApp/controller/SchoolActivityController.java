@@ -1,11 +1,16 @@
 package com.funyoo.hqxApp.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.funyoo.hqxApp.model.SchoolActivityModel;
 import com.funyoo.hqxApp.model.User;
 import com.funyoo.hqxApp.result.CodeMsg;
 import com.funyoo.hqxApp.result.Result;
 import com.funyoo.hqxApp.service.SchActivityService;
 import com.funyoo.hqxApp.service.UserService;
+import com.funyoo.hqxApp.util.cachePool.CacheKeys;
+import com.funyoo.hqxApp.util.cachePool.CachePoolInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +28,25 @@ public class SchoolActivityController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CachePoolInterface cachePool;
+
+    private Logger logger = LogManager.getLogger(SchoolActivityController.class);
+
     @RequestMapping("/getActivities")
     public Result<List<SchoolActivityModel>> getActivities() {
         List<SchoolActivityModel> activities = null;
+        String listStr;
+        if ((listStr = (String) cachePool.get(CacheKeys.SCHOOL_ACTIVITY_LIST)) != null) {
+            return Result.success(JSON.parseObject(listStr, List.class));
+        }
+
+        logger.info("[DO_SQL]" + "[getActivities]");
         activities = actSrv.getActivities();
         if (activities == null || activities.size() == 0) {
             return Result.error(CodeMsg.NO_DATA_ERROR);
         }
+        cachePool.put(CacheKeys.SCHOOL_ACTIVITY_LIST, JSON.toJSONString(activities));
         return Result.success(activities);
     }
 
