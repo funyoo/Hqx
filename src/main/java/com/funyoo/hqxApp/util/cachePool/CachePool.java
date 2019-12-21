@@ -1,15 +1,16 @@
 package com.funyoo.hqxApp.util.cachePool;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class CachePool implements CachePoolInterface<String, String> {
 
     public static final CachePool instance = new CachePool();
     private Map<String, String> cache;
-
 
     private CachePool() {
         cache = new ConcurrentHashMap<>();
