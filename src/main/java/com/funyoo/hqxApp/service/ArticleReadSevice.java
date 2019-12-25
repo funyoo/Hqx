@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,12 +65,35 @@ public class ArticleReadSevice {
     }
 
     /**
+     * 查询最新文章
+     * @param part
+     * @param index
+     * @return
+     */
+    public List<Article> getNewArticle(String part, Integer index) {
+        if (index <= 0) {
+            return new ArrayList<>();
+        }
+        return articleDao.getNewArticleByNum(part, index);
+    }
+
+    /**
      * 增加浏览量
      * @param articleHelper
      */
     public void counter(ArticleHelper articleHelper) {
         // TODO 或将加redis优化
         ArticleCountPool.countUp(articleHelper);
+    }
+
+    /**
+     * 查找文章
+     * @param str
+     * @return
+     */
+    public List<Article> search(String str) {
+        str = "%" + str + "%";
+        return articleDao.search(str);
     }
 
     /**
