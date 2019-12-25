@@ -27,4 +27,16 @@ public interface ArticleDao {
 
     @Select("SELECT * FROM appview_${part} WHERE id = #{id}")
     Article getArticleById(@Param("part") String part, @Param("id") Integer artId);
+
+    @Select("SELECT * FROM appview_${part} WHERE id > #{id}")
+    List<Article> getNewArticleByNum(@Param("part") String part, @Param("id") Integer index);
+
+    @Select("SELECT * FROM appview_news WHERE title LIKE #{str} " +
+            "UNION " +
+            "SELECT * FROM appview_character WHERE title LIKE #{str} " +
+            "UNION " +
+            "SELECT * FROM appview_history WHERE title LIKE #{str} " +
+            "UNION " +
+            "SELECT * FROM appview_military WHERE title LIKE #{str} ")
+    List<Article> search(@Param("str") String str);
 }
