@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -40,7 +41,7 @@ public class AppNewsViewController {
     @ResponseBody
     public Result<List<Article>> getArticles(String part, Integer index) {
         //查询相关模块文章列表，返回list
-        List<Article> articles;
+        List<Article> articles = new ArrayList<>();
         String listStr;
         String key = CacheKeys.ARTICLE_LIST + part + index;
         if ((listStr = (String) cachePool.get(key)) != null) {
@@ -50,9 +51,7 @@ public class AppNewsViewController {
 
         logger.info("[DO_SQL]" + "[getArticles] [" + part + ", " + index + "]");
         articles = viewSevices.getArticle(part, index);
-        if (articles == null || articles.size() == 0) {
-            return Result.error(CodeMsg.NO_ARTICLE_DATA);
-        }
+
         cachePool.put(key, JSON.toJSONString(articles));
         return Result.success(articles);
     }
@@ -75,10 +74,33 @@ public class AppNewsViewController {
 
         logger.info("[DO_SQL]" + "[getTopArticle] [" + part + "]");
         article = viewSevices.getTopArticle(part);
-        if (article == null || article.getPicUrl().isEmpty()) {
-            return Result.error(CodeMsg.GET_TOP_VIEW_ERR);
-        }
+
         cachePool.put(key, JSON.toJSONString(article));
         return Result.success(article);
+    }
+
+    /**
+     * 查询相关模块文章列表
+     * @param part 模块名称
+     * @param index  尾部下标  查询小于改下标的文章若干篇
+     * @return 文章列表
+     */
+    @RequestMapping("/newArticles")
+    @ResponseBody
+    public Result<List<Article>> getNewArticles(String part, Integer index) {
+        //查询相关模块文章列表，返回list
+        List<Article> articles = new ArrayList<>();
+        String listStr;
+        String key = CacheKeys.NEW_ARTICLE_LIST + part + index;
+        if ((listStr = (String) cachePool.get(key)) != null) {
+            // 内存缓存有数据
+            return Result.success(JSON.parseObject(listStr, List.class));
+        }
+
+        logger.info("[DO_SQL]" + "[getNewArticles] [" + part + ", " + index + "]");
+        articles = viewSevices.getNewArticle(part, index);
+
+        cachePool.put(key, JSON.toJSONString(articles));
+        return Result.success(articles);
     }
 }
