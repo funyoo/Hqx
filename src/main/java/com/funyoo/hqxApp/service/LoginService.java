@@ -29,7 +29,6 @@ public class LoginService {
             String pass = MD5Util.formPassToDBPass(password);
 
             if (DBpass.equals(pass)) {
-                System.out.println(user);
                 return user;
             }
         }
