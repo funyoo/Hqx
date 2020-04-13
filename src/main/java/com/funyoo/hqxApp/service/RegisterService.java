@@ -1,5 +1,6 @@
 package com.funyoo.hqxApp.service;
 
+import com.funyoo.hqxApp.dao.CollectionDao;
 import com.funyoo.hqxApp.dao.UserDao;
 import com.funyoo.hqxApp.model.User;
 import com.funyoo.hqxApp.result.CodeMsg;
@@ -16,6 +17,9 @@ public class RegisterService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    CollectionDao collectionDao;
 
     /**
      * 根据 邮箱 注册用户
@@ -42,6 +46,8 @@ public class RegisterService {
 
         if (userDao.insertUser(user)) {
             CaptchaPool.remove(mail);
+            User u = userDao.getUserByMail(mail);
+            collectionDao.buildTable(u.getId());
             return Result.success(true);
         }
         return Result.error(CodeMsg.REGISTER_ERR);
