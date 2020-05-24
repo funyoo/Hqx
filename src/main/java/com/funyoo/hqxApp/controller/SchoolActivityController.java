@@ -9,6 +9,7 @@ import com.funyoo.hqxApp.service.SchActivityService;
 import com.funyoo.hqxApp.service.UserService;
 import com.funyoo.hqxApp.util.cachePool.CacheKeys;
 import com.funyoo.hqxApp.util.cachePool.CachePoolInterface;
+import com.funyoo.hqxApp.vo.ActMember;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,20 @@ public class SchoolActivityController {
         // TODO 创建活动 创建时会先将活动创建到活动列表中 再通过活动id 创建活动参与表
 
         return Result.success(true);
+    }
+
+    /**
+     * 查询活动参与人列表
+     * @param id
+     * @return
+     */
+    @RequestMapping("/getMembers")
+    public Result<List<ActMember>> getMembers(Integer id) {
+        List<ActMember> result = actSrv.getMember(id);
+        if (result == null || result.size() == 0) {
+            return Result.error(CodeMsg.NO_SCHOOL_ACTIVITY_MEMBER);
+        }
+        return Result.success(result);
     }
 
     /**

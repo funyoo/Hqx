@@ -5,6 +5,7 @@ import com.funyoo.hqxApp.dao.SchActDao;
 import com.funyoo.hqxApp.model.Article;
 import com.funyoo.hqxApp.model.SchoolActivityModel;
 import com.funyoo.hqxApp.model.User;
+import com.funyoo.hqxApp.vo.ActMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,19 @@ public class SchActivityService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 获取活动参与用户列表
+     * @param id
+     * @return
+     */
+    public List<ActMember> getMember(Integer id) {
+        if (id == null || id == 0) {
+            return null;
+        }
+        List<ActMember> members = schActDao.getMember(id);
+        return members;
     }
 
     /**

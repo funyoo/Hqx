@@ -8,7 +8,7 @@
     <Properties>
         <!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
         <!-- %logger{36} 表示 Logger 名字最长36个字符 -->
-        <property name="LOG_PATTERN" value="%highlight{%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=cyan, DEBUG=cyan,TRACE=blue}" />
+        <property name="LOG_PATTERN" value="%highlight{%date{YYYY-MM-DD HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=cyan, DEBUG=cyan,TRACE=blue}" />
          <!--定义日志存储的路径，不要配置相对路径-->
         <property name="FILE_PATH" value="/funyoo_project/hqx_app/log/" />
         <property name="FILE_NAME" value="hqx_news" />
@@ -22,8 +22,7 @@
             <!--控制台只输出level及其以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
         </console>
-
-        文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，适合临时测试用
+        <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，适合临时测试用-->
         <File name="Filelog" fileName="${FILE_PATH}/test.log" append="false">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </File>

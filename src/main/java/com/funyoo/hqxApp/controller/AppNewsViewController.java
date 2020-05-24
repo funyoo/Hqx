@@ -48,11 +48,18 @@ public class AppNewsViewController {
             // 内存缓存有数据
             return Result.success(JSON.parseObject(listStr, List.class));
         }
+        // 为减轻内存缓存雪崩对数据库造成压力
+        synchronized (this) {
+            if ((listStr = (String) cachePool.get(key)) != null) {
+                // 内存缓存有数据
+                return Result.success(JSON.parseObject(listStr, List.class));
+            }
 
-        logger.info("[DO_SQL]" + "[getArticles] [" + part + ", " + index + "]");
-        articles = viewSevices.getArticle(part, index);
+            logger.info("[DO_SQL]" + "[getArticles] [" + part + ", " + index + "]");
 
-        cachePool.put(key, JSON.toJSONString(articles));
+            articles = viewSevices.getArticle(part, index);
+            cachePool.put(key, JSON.toJSONString(articles));
+        }
         return Result.success(articles);
     }
 
@@ -72,10 +79,15 @@ public class AppNewsViewController {
             return Result.success(JSON.parseObject(topStr, Article.class));
         }
 
-        logger.info("[DO_SQL]" + "[getTopArticle] [" + part + "]");
-        article = viewSevices.getTopArticle(part);
+        synchronized (this) {
+            if ((topStr = (String) cachePool.get(key)) != null) {
+                return Result.success(JSON.parseObject(topStr, Article.class));
+            }
+            logger.info("[DO_SQL]" + "[getTopArticle] [" + part + "]");
+            article = viewSevices.getTopArticle(part);
 
-        cachePool.put(key, JSON.toJSONString(article));
+            cachePool.put(key, JSON.toJSONString(article));
+        }
         return Result.success(article);
     }
 
@@ -96,11 +108,15 @@ public class AppNewsViewController {
             // 内存缓存有数据
             return Result.success(JSON.parseObject(listStr, List.class));
         }
+        synchronized (this) {
+            if ((listStr = (String) cachePool.get(key)) != null) {
+                return Result.success(JSON.parseObject(listStr, List.class));
+            }
+            logger.info("[DO_SQL]" + "[getNewArticles] [" + part + ", " + index + "]");
+            articles = viewSevices.getNewArticle(part, index);
 
-        logger.info("[DO_SQL]" + "[getNewArticles] [" + part + ", " + index + "]");
-        articles = viewSevices.getNewArticle(part, index);
-
-        cachePool.put(key, JSON.toJSONString(articles));
+            cachePool.put(key, JSON.toJSONString(articles));
+        }
         return Result.success(articles);
     }
 }

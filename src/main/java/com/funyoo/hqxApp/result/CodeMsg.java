@@ -23,6 +23,7 @@ public class CodeMsg {
     public static final CodeMsg NO_DATA_ERROR = new CodeMsg(500810, "没有查询到数据");
     public static final CodeMsg NO_COLLECT_TARGET = new CodeMsg(500900, "没有找到目标文章");
 
+    public static final CodeMsg NO_SCHOOL_ACTIVITY_MEMBER = new CodeMsg(501000, "该活动目前没人参与");
 
     private int code;
     private String msg;
