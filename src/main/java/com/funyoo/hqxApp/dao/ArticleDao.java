@@ -1,10 +1,7 @@
 package com.funyoo.hqxApp.dao;
 
 import com.funyoo.hqxApp.model.Article;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -39,4 +36,7 @@ public interface ArticleDao {
             "UNION " +
             "SELECT * FROM appview_military WHERE title LIKE #{str} ")
     List<Article> search(@Param("str") String str);
+
+    @Update("UPDATE appview_${part} SET count = count + #{count} WHERE id = #{id}")
+    void count(@Param("part") String part, @Param("id") Integer index, @Param("count") Integer count);
 }
