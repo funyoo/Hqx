@@ -21,6 +21,9 @@ public class ArticleReadSevice {
     @Autowired
     AppConfig appConfig;
 
+    @Autowired
+    ArticleCountPool articleCountPool;
+
 //    @Value("${hqx.articleOnceReadNum}")
 //    private Integer articleOnceReadNum;
 
@@ -83,7 +86,7 @@ public class ArticleReadSevice {
      */
     public void counter(ArticleHelper articleHelper) {
         // TODO 或将加redis优化
-        ArticleCountPool.countUp(articleHelper);
+        articleCountPool.countUp(articleHelper);
     }
 
     /**
